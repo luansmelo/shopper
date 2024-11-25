@@ -20,6 +20,16 @@ const makeSut = () => {
     }
 }
 
+const makeCustomerUseCaseSpyWithError = () => {
+    class CustomerUseCaseSpyWithError {
+        save() {
+            throw new Error();
+        }
+    }
+
+    return new CustomerUseCaseSpyWithError()
+}
+
 describe('Customer Router', () => {
 
     it('Should return 400 if no email is provided', () => {
@@ -93,4 +103,23 @@ describe('Customer Router', () => {
         expect(customerUseCaseSpy.name).toBe(httpRequest.body.name)
         expect(customerUseCaseSpy.email).toBe(httpRequest.body.email)
     })
+
+    it('Should return 500 if CustomerUseCase throws', () => {
+        const customerUseCaseSpy = makeCustomerUseCaseSpyWithError()
+        const sut = new CustomerRouter(customerUseCaseSpy)
+
+        const httpRequest = {
+            body: {
+                name: 'any_name',
+                email: 'any_mail@mail.com',
+            }
+        };
+
+        const httpResponse = sut.route(httpRequest);
+
+        expect(httpResponse.statusCode).toBe(500);
+        expect(httpResponse.body).toEqual({
+            error: 'Internal Server Error'
+        });
+    });
 })
