@@ -1,3 +1,5 @@
+import { MissingParamError } from "../errors/missing-param-error"
+import { badRequest } from "../helpers/http-helper"
 import { CustomerRouter } from "./customer-router"
 
 export class CustomerUseCaseSpy {
@@ -42,10 +44,9 @@ describe('Customer Router', () => {
         }
 
         const httpResponse = sut.route(httpRequest)
+        
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse.body).toEqual({
-            error: "Missing param: email"
-        });
+        expect(httpResponse).toEqual(badRequest(new MissingParamError('email')));
     })
 
     it('Should return 400 if no name is provided', () => {
@@ -58,10 +59,9 @@ describe('Customer Router', () => {
         }
 
         const httpResponse = sut.route(httpRequest)
+
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse.body).toEqual({
-            error: "Missing param: name"
-        });
+        expect(httpResponse).toEqual(badRequest(new MissingParamError('name')));
     })
 
     it('Should return 200 if email and name is provided', () => {
