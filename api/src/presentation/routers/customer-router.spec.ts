@@ -1,13 +1,29 @@
 import { CustomerRouter } from "./customer-router"
 
+export class CustomerUseCaseSpy {
+    public email!: string
+    public name!: string
+
+    save(email: string, name: string) {
+        this.email = email
+        this.name = name
+    }
+}
+
 const makeSut = () => {
-    return new CustomerRouter()
+    const customerUseCaseSpy = new CustomerUseCaseSpy()
+    const sut = new CustomerRouter(customerUseCaseSpy)
+
+    return {
+        sut,
+        customerUseCaseSpy
+    }
 }
 
 describe('Customer Router', () => {
 
     it('Should return 400 if no email is provided', () => {
-        const sut = makeSut()
+        const { sut } = makeSut()
 
         const httpRequest = {
             body: {
@@ -23,7 +39,7 @@ describe('Customer Router', () => {
     })
 
     it('Should return 400 if no name is provided', () => {
-        const sut = makeSut()
+        const { sut } = makeSut()
 
         const httpRequest = {
             body: {
@@ -39,7 +55,7 @@ describe('Customer Router', () => {
     })
 
     it('Should return 200 if email and name is provided', () => {
-        const sut = makeSut()
+        const { sut } = makeSut()
 
         const httpRequest = {
             body: {
@@ -53,7 +69,7 @@ describe('Customer Router', () => {
     })
 
     it('Should return 500 if no has body', () => {
-        const sut = makeSut()
+        const { sut } = makeSut()
 
         const httpResponse = sut.route({})
         expect(httpResponse.statusCode).toBe(500)
@@ -62,5 +78,19 @@ describe('Customer Router', () => {
         })
     })
 
-   
+    it('Should call CustomerUseCase with correct params', () => {
+        const { sut, customerUseCaseSpy } = makeSut()
+
+        const httpRequest = {
+            body: {
+                name: 'any_name',
+                email: 'any_mail@mail.com',
+            }
+        }
+
+        sut.route(httpRequest)
+
+        expect(customerUseCaseSpy.name).toBe(httpRequest.body.name)
+        expect(customerUseCaseSpy.email).toBe(httpRequest.body.email)
+    })
 })
