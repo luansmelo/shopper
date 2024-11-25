@@ -8,6 +8,11 @@
     "prepare": "husky",
     "lint": "eslint"
   },
+  "lint-staged": {
+    "*.ts": [
+        "eslint 'src/**' --fix --no-error-on-unmatched-pattern"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -25,6 +30,6 @@
     "lint-staged": "^15.2.10",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.15.0"
+    "typescript-eslint": "^8.16.0"
   }
 }
