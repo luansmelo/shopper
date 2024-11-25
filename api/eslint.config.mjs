@@ -1,30 +1,32 @@
-import path from 'path';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import globals from 'globals';
+import path from "path";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+/** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    files: ['src/**/*.ts'],
+    files: ["**/*.{mjs,ts}"],
     languageOptions: {
-      parser: tsParser,
+      parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig.json',
-        tsconfigRootDir: path.dirname(new URL(import.meta.url).pathname),
-        ecmaVersion: 'latest',
+        project: path.resolve(__dirname, './tsconfig.json'), 
+        tsconfigRootDir: __dirname,
         warnOnUnsupportedTypeScriptVersion: false,
       },
-      globals: globals.browser,
+      globals: globals.node, 
     },
     plugins: {
-      '@typescript-eslint': tsPlugin,
+      '@typescript-eslint': tseslint.plugin,
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
-  },
-  {
-    ignores: ['node_modules/**', 'dist/**'],
-  },
+    ignores: [
+      'dist',
+      'node_modules'  
+    ]
+  }
 ];
