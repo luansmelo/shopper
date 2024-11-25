@@ -5,13 +5,8 @@
   "scripts": {
     "test": "jest --watchAll",
     "test:staged": "jest",
-    "prepare": "husky"
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "eslint --fix",
-      "npm run test:staged"
-    ]
+    "prepare": "husky",
+    "lint": "eslint"
   },
   "keywords": [],
   "author": "",
