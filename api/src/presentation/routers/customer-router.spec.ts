@@ -1,62 +1,7 @@
-export interface HttpRequest {
-    query?: unknown;
-    headers?: unknown;
-    body?: unknown;
-    userId?: string;
-    params?: unknown;
-}
-
-export class HttpResponse {
-    static badRequest(paramName: string) {
-        return {
-            statusCode: 400,
-            body: new MissingParamError(paramName)
-        }
-    }
-
-    static serverError() {
-        return {
-            statusCode: 500,
-            body: null,
-        }
-    }
-
-    static ok(body: unknown) {
-        return {
-            statusCode: 200,
-            body,
-        }
-    }
-}
-
-class MissingParamError extends Error {
-    constructor(paramName: string) {
-        super(`Missing param: ${paramName}`)
-        this.name = paramName
-    }
-}
-
-class CustomerRouter {
-    route(httpRequest: HttpRequest) {
-        if (!httpRequest.body) {
-            return HttpResponse.serverError()
-        }
-
-        const body = httpRequest.body as { email?: string; name?: string };
-
-        if (!body.email) {
-            return HttpResponse.badRequest("email")
-        }
-
-        if (!body.name) {
-            return HttpResponse.badRequest("name")
-        }
-
-        return HttpResponse.ok(body)
-    }
-}
+import { CustomerRouter } from "./customer-router"
 
 describe('Customer Router', () => {
+
     it('Should return 400 if no email is provided', () => {
         const sut = new CustomerRouter()
 
@@ -68,7 +13,9 @@ describe('Customer Router', () => {
 
         const httpResponse = sut.route(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse.body).toEqual(new MissingParamError('email'))
+        expect(httpResponse.body).toEqual({
+            error: "Missing param: email"
+        });
     })
 
     it('Should return 400 if no name is provided', () => {
@@ -82,7 +29,9 @@ describe('Customer Router', () => {
 
         const httpResponse = sut.route(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse.body).toEqual(new MissingParamError('name'))
+        expect(httpResponse.body).toEqual({
+            error: "Missing param: name"
+        });
     })
 
     it('Should return 200 if email and name is provided', () => {
@@ -96,13 +45,16 @@ describe('Customer Router', () => {
         }
 
         const httpResponse = sut.route(httpRequest)
-        expect(httpResponse?.statusCode).toBe(200)
+        expect(httpResponse.statusCode).toBe(200)
     })
 
     it('Should return 500 if no has body', () => {
         const sut = new CustomerRouter()
 
         const httpResponse = sut.route({})
-        expect(httpResponse?.statusCode).toBe(500)
+        expect(httpResponse.statusCode).toBe(500)
+        expect(httpResponse.body).toEqual({
+            error: 'Internal Server Error'
+        })
     })
 })
