@@ -6,23 +6,42 @@ export interface HttpRequest {
     params?: unknown;
 }
 
-export interface HttpResponse {
-    statusCode: number
+export class HttpResponse {
+    static badRequest(paramName: string) {
+        return {
+            statusCode: 400,
+            body: new MissingParamError(paramName)
+        }
+    }
+
+    static ok(body: unknown) {
+        return {
+            statusCode: 200,
+            body,
+        }
+    }
+}
+
+class MissingParamError extends Error {
+    constructor(paramName: string) {
+        super(`Missing param: ${paramName}`)
+        this.name = paramName
+    }
 }
 
 class CustomerRouter {
-    route(httpRequest: HttpRequest): HttpResponse {
+    route(httpRequest: HttpRequest) {
         const body = httpRequest.body as { email?: string; name?: string };
 
-        if (!body.email || !body.name) {
-            return {
-                statusCode: 400
-            }
+        if (!body.email) {
+            return HttpResponse.badRequest("email")
         }
 
-        return {
-            statusCode: 200
+        if (!body.name) {
+            return HttpResponse.badRequest("name")
         }
+
+        return HttpResponse.ok(body)
     }
 }
 
@@ -37,7 +56,8 @@ describe('Customer Router', () => {
         }
 
         const httpResponse = sut.route(httpRequest)
-        expect(httpResponse?.statusCode).toBe(400)
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual(new MissingParamError('email'))
     })
 
     it('Should return 400 if no name is provided', () => {
@@ -50,7 +70,8 @@ describe('Customer Router', () => {
         }
 
         const httpResponse = sut.route(httpRequest)
-        expect(httpResponse?.statusCode).toBe(400)
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual(new MissingParamError('name'))
     })
 
     it('Should return 200 if email and name is provided', () => {
