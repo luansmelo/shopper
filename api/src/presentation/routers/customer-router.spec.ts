@@ -1,9 +1,13 @@
 import { CustomerRouter } from "./customer-router"
 
+const makeSut = () => {
+    return new CustomerRouter()
+}
+
 describe('Customer Router', () => {
 
     it('Should return 400 if no email is provided', () => {
-        const sut = new CustomerRouter()
+        const sut = makeSut()
 
         const httpRequest = {
             body: {
@@ -19,7 +23,7 @@ describe('Customer Router', () => {
     })
 
     it('Should return 400 if no name is provided', () => {
-        const sut = new CustomerRouter()
+        const sut = makeSut()
 
         const httpRequest = {
             body: {
@@ -35,7 +39,7 @@ describe('Customer Router', () => {
     })
 
     it('Should return 200 if email and name is provided', () => {
-        const sut = new CustomerRouter()
+        const sut = makeSut()
 
         const httpRequest = {
             body: {
@@ -49,7 +53,7 @@ describe('Customer Router', () => {
     })
 
     it('Should return 500 if no has body', () => {
-        const sut = new CustomerRouter()
+        const sut = makeSut()
 
         const httpResponse = sut.route({})
         expect(httpResponse.statusCode).toBe(500)
@@ -57,4 +61,6 @@ describe('Customer Router', () => {
             error: 'Internal Server Error'
         })
     })
+
+   
 })
