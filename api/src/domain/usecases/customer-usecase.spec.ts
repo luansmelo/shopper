@@ -17,7 +17,7 @@ class LoadCustomerByEmailRepositorySpy {
 class CustomerUseCase {
     constructor(private readonly repository: LoadCustomerByEmailRepositorySpy) { }
 
-    async save(email?: string, name?: string) {
+    async save(email: string, name: string) {
         if (!email) throw new MissingParamError('email')
         if (!name) throw new MissingParamError('name')
 
@@ -38,13 +38,13 @@ const makeSut = () => {
 describe('Customer UseCase', () => {
     it('Should throw if no email is provided', async () => {
         const { sut } = makeSut()
-        const promise = sut.save()
+        const promise = sut.save('', '')
         expect(promise).rejects.toThrow()
     })
 
     it('Should throw if no name is provided', async () => {
         const { sut } = makeSut()
-        const promise = sut.save('email@mail.com')
+        const promise = sut.save('email@mail.com', '')
         expect(promise).rejects.toThrow()
     })
 
