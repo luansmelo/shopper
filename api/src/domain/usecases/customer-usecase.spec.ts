@@ -1,12 +1,7 @@
 import { CustomerUseCase } from "./customer-usecase"
 
-interface CustomerResponse {
-    name: string,
-    email: string
-}
-
 class LoadCustomerByEmailRepositorySpy {
-    private customer: CustomerResponse = { name: 'Janja', email: '' }
+    private customer = { name: 'Janja', email: '' }
 
     async load(email: string) {
         if (email) this.customer.email = email
