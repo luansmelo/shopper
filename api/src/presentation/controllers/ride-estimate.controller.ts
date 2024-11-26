@@ -2,6 +2,7 @@ import { RideEstimate } from "@/domain/usecases/ride-estimate"
 import { badRequest, ok, serverError } from "../helpers/http-helper"
 import { Controller, HttpRequest, HttpResponse } from "../protocols"
 import { MissingParamError } from "../errors/missing-param-error"
+import { OriginEqualsDestinationError } from "@/domain/errors"
 
 export class RideEstimateController implements Controller {
     constructor(private readonly rideUseCase: RideEstimate) { }
@@ -15,6 +16,10 @@ export class RideEstimateController implements Controller {
                 if (!body[field]) {
                     return badRequest(new MissingParamError(field))
                 }
+            }
+
+            if (body.origin === body.destination) {
+                return badRequest(new OriginEqualsDestinationError())
             }
 
             const result = await this.rideUseCase.save(body)

@@ -1,7 +1,8 @@
-import { RideEstimate } from "@/domain/usecases/ride-estimate"
-import { RideEstimateController } from "./ride-estimate.controller"
-import { MissingParamError } from "../errors/missing-param-error"
-import { badRequest, serverError } from "../helpers/http-helper"
+import { RideEstimate } from '@/domain/usecases/ride-estimate'
+import { RideEstimateController } from './ride-estimate.controller'
+import { MissingParamError } from '../errors/missing-param-error'
+import { badRequest, serverError } from '../helpers/http-helper'
+import { OriginEqualsDestinationError } from '@/domain/errors'
 
 class RideUseCaseStub implements RideEstimate {
     async save(data: RideEstimate.Params): Promise<RideEstimate.Result> {
@@ -40,7 +41,7 @@ class RideUseCaseStub implements RideEstimate {
                         },
                         distanceMeters: 152480,
                         localizedValues: {
-                            duration: { text: "2 horas 8 minutos" },
+                            duration: { text: '2 horas 8 minutos' },
                         },
                     },
                 ],
@@ -151,5 +152,20 @@ describe('RideEstimate Controller', () => {
 
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse).toEqual(serverError(new Error()))
+    })
+
+    it('Should return 400 if origin and destination are the same', async () => {
+        const { sut } = makeSut()
+
+        const httpRequest = {
+            body: {
+                customer_id: 'any_customer_id',
+                origin: 'São Paulo',
+                destination: 'São Paulo'
+            }
+        }
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse).toEqual(badRequest(new OriginEqualsDestinationError()))
     })
 })
