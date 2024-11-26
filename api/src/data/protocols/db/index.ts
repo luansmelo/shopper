@@ -1,2 +1,2 @@
 export * from "./load-customer-by-email.repository"
-export * from "./save-customer.repository"
+export * from "./add-customer.repository"
