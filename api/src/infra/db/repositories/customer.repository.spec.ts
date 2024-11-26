@@ -26,7 +26,11 @@ describe('LoadByCustomerEmail Repository', () => {
         await sequelize.close()
     })
 
-    it('Should return an customer if customer is found', async () => {
+    beforeEach(async () => {
+        await CustomerModel.truncate()
+    })
+
+    it('Should return a customer if customer is found', async () => {
         const customerData = {
             email: 'test@example.com',
             name: 'Test Customer'
@@ -49,5 +53,19 @@ describe('LoadByCustomerEmail Repository', () => {
 
         const customer = await sut.load(email)
         expect(customer).toBeNull()
+    })
+
+    it('Should return a customer on success create', async () => {
+        const { sut } = makeSut()
+        const customerParams = {
+            name: 'any_name',
+            email: 'any_email'
+        }
+
+        const customer = await sut.save(customerParams)
+        expect(customer).toBeTruthy()
+        expect(customer.id).toBeTruthy()
+        expect(customer.name).toBe(customerParams.name)
+        expect(customer.email).toBe(customerParams.email)
     })
 })
