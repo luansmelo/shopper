@@ -1,8 +1,8 @@
 import { EmailValidator } from "@/validators/protocols/email-validator"
-import { MissingParamError } from "../errors/missing-param-error"
 import { badRequest } from "../helpers/http-helper"
 import { CustomerRouter } from "./customer-router"
-import { InvalidParamError } from "../errors/invalid-param-error"
+import { InvalidParamError } from "../../utils/errors/invalid-param-error"
+import { MissingParamError } from "@/utils/errors/missing-param-error"
 
 const makeSut = () => {
     const emailValidatorSpy = makeEmailValidator()
