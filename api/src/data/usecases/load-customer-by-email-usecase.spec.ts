@@ -1,5 +1,5 @@
 import { LoadCustomerByEmailRepositoryProtocol } from "../protocols/db/load-customer-by-email.repository"
-import { LoadCustomerByIdUseCase } from "./load-customer-by-email-usecase"
+import { LoadCustomerByEmailUseCase } from "./load-customer-by-email-usecase"
 
 class LoadCustomerByEmailRepositorySpy implements LoadCustomerByEmailRepositoryProtocol {
     async load(email: string): Promise<LoadCustomerByEmailRepositoryProtocol.Result | null> {
@@ -13,7 +13,7 @@ class LoadCustomerByEmailRepositorySpy implements LoadCustomerByEmailRepositoryP
 
 const makeSut = () => {
     const loadCustomerByEmailRepository = new LoadCustomerByEmailRepositorySpy()
-    const sut = new LoadCustomerByIdUseCase(loadCustomerByEmailRepository)
+    const sut = new LoadCustomerByEmailUseCase(loadCustomerByEmailRepository)
 
     return {
         sut,
