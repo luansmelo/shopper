@@ -1,14 +1,6 @@
-import { Customer, LoadCustomerByEmailRepositoryContract } from "@/domain/repositories/load-customer-by-email.repository";
 import { CustomerModel } from "./models/customer";
 import { Sequelize } from "sequelize-typescript";
-
-class LoadCustomerByEmailRepository implements LoadCustomerByEmailRepositoryContract {
-    async load(email: string): Promise<Customer.Result | null> {
-        const customer = await CustomerModel.findOne({ where: { email } })
-        if (!customer) return null
-        return customer.get({ plain: true })
-    }
-}
+import { LoadCustomerByEmailRepository } from "./load-customer-by-email.repository";
 
 const makeSut = () => {
     const sut = new LoadCustomerByEmailRepository()
