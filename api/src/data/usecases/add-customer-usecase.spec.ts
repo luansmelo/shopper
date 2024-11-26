@@ -1,6 +1,6 @@
-import { AddCustomer } from "@/domain/usecases/add-customer"
 import { LoadCustomerByEmailRepositoryProtocol } from "../protocols/db/load-customer-by-email.repository"
 import { AddCustomerRepositoryProtocol } from "../protocols"
+import { AddCustomerUseCase } from "./add-customer-usecase"
 
 const makeLoadCustomerbyEmailStub = () => {
     class LoadCustomerByEmailRepository implements LoadCustomerByEmailRepositoryProtocol {
@@ -22,20 +22,6 @@ const makeAddCustomerRepositoryStub = () => {
         }
     }
     return new AddCustomerRepositoryStub()
-}
-
-class AddCustomerUseCase implements AddCustomer {
-    constructor(
-        private readonly repository: LoadCustomerByEmailRepositoryProtocol,
-        private readonly addCustomerRepository: AddCustomerRepositoryProtocol
-    ) { }
-
-    async save(data: AddCustomer.Params): Promise<AddCustomer.Result> {
-        const customer = await this.repository.load(data.email)
-        if (customer) return customer
-
-        return this.addCustomerRepository.save(data)
-    }
 }
 
 const makeSut = () => {
