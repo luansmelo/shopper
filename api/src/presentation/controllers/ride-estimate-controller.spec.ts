@@ -1,5 +1,7 @@
 import { RideEstimate } from "@/domain/usecases/ride-estimate"
 import { RideEstimateController } from "./ride-estimate.controller"
+import { MissingParamError } from "../errors/missing-param-error"
+import { badRequest } from "../helpers/http-helper"
 
 class RideUseCaseStub implements RideEstimate {
     async save(data: RideEstimate.Params): Promise<RideEstimate.Result> {
@@ -74,5 +76,20 @@ describe('RideEstimate Controller', () => {
         expect(httpResponse.body).toHaveProperty('id')
         expect(httpResponse.body).toHaveProperty('origin')
         expect(httpResponse.body).toHaveProperty('destination')
+    })
+
+    it('Should return 400 if no customer_id is provided', async () => {
+        const { sut } = makeSut()
+
+        const httpRequest = {
+            body: {
+                origin: 'any_origin',
+                destination: 'any_destination'
+            }
+        }
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse).toEqual(badRequest(new MissingParamError('customer_id')))
     })
 })
