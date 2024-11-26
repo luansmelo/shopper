@@ -34,7 +34,4 @@ export class RideModel extends Model {
 
     @Column({ type: DataType.STRING, allowNull: false })
     duration!: string;
-
-    @Column({ type: DataType.JSON, allowNull: true })
-    route_response!: object;
 }
