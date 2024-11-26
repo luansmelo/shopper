@@ -1,8 +1,8 @@
-import { MissingParamError } from "@/utils/errors/missing-param-error"
+import { MissingParamError } from "@/presentation/errors/missing-param-error"
 import { LoadCustomerByEmailRepositoryProtocol } from "../protocols/db/load-customer-by-email.repository"
 import { LoadCustomerByEmail } from "@/domain/usecases/load-customer-by-email"
 
-export class LoadCustomerByIdUseCase implements LoadCustomerByEmail {
+export class LoadCustomerByEmailUseCase implements LoadCustomerByEmail {
     constructor(private readonly repository: LoadCustomerByEmailRepositoryProtocol) { }
 
     async load(email: string) {
