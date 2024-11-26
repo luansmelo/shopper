@@ -2,7 +2,7 @@ import { EmailValidator } from "@/validators/protocols/email-validator";
 import { badRequest } from "../helpers/http-helper";
 import { InvalidParamError } from "../errors/invalid-param-error";
 import { MissingParamError } from "@/presentation/errors/missing-param-error";
-import { LoadCustomerByEmailController } from "./customer-controller";
+import { LoadCustomerByEmailController } from "./load-customer-by-email-controller";
 import { LoadCustomerByEmail } from "@/domain/usecases/load-customer-by-email";
 import { CustomerModel } from "@/domain/models/customer";
 
