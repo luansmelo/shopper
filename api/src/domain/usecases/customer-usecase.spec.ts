@@ -1,4 +1,4 @@
-import { MissingParamError } from "@/utils/errors/missing-param-error"
+import { CustomerUseCase } from "./customer-usecase"
 
 interface CustomerResponse {
     name: string,
@@ -11,17 +11,6 @@ class LoadCustomerByEmailRepositorySpy {
     async load(email: string) {
         if (email) this.customer.email = email
         return this.customer
-    }
-}
-
-class CustomerUseCase {
-    constructor(private readonly repository: LoadCustomerByEmailRepositorySpy) { }
-
-    async save(email: string, name: string) {
-        if (!email) throw new MissingParamError('email')
-        if (!name) throw new MissingParamError('name')
-
-        return await this.repository.load(email)
     }
 }
 
