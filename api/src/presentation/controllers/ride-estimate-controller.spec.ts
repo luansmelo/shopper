@@ -92,4 +92,19 @@ describe('RideEstimate Controller', () => {
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse).toEqual(badRequest(new MissingParamError('customer_id')))
     })
+
+    it('Should return 400 if no destination is provided', async () => {
+        const { sut } = makeSut()
+
+        const httpRequest = {
+            body: {
+                customer_id: 'any_customer_id',
+                origin: 'any_origin',
+            }
+        }
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse).toEqual(badRequest(new MissingParamError('destination')))
+    })
 })

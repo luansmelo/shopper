@@ -14,6 +14,10 @@ export class RideEstimateController implements Controller {
                 return badRequest(new MissingParamError('customer_id'))
             }
 
+            if (!body.destination) {
+                return badRequest(new MissingParamError('destination'))
+            }
+
             const result = await this.rideUseCase.save(body)
 
             return ok(result)
