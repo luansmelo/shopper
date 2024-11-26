@@ -31,7 +31,10 @@ const makeCustomerUseCaseSpy = () => {
 
 const makeEmailValidator = () => {
     class EmailValidatorSpy implements EmailValidator {
-        isValid(input: unknown): boolean {
+        email!: string
+
+        isValid(email: string): boolean {
+            this.email = email
             return true
         }
     }
@@ -42,7 +45,7 @@ const makeEmailValidator = () => {
 const makeCustomerUseCaseSpyWithError = () => {
     class CustomerUseCaseSpyWithError {
         save() {
-            throw new Error();
+            throw new Error()
         }
     }
     return new CustomerUseCaseSpyWithError()
@@ -62,7 +65,7 @@ describe('Customer Router', () => {
         const httpResponse = sut.route(httpRequest)
 
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse).toEqual(badRequest(new MissingParamError('email')));
+        expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
     })
 
     it('Should return 400 if no name is provided', () => {
@@ -77,7 +80,7 @@ describe('Customer Router', () => {
         const httpResponse = sut.route(httpRequest)
 
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse).toEqual(badRequest(new MissingParamError('name')));
+        expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
     })
 
     it('Should return 200 if email and name is provided', () => {
@@ -129,18 +132,18 @@ describe('Customer Router', () => {
                 name: 'any_name',
                 email: 'any_mail@mail.com',
             }
-        };
+        }
 
-        const httpResponse = sut.route(httpRequest);
+        const httpResponse = sut.route(httpRequest)
 
-        expect(httpResponse.statusCode).toBe(500);
+        expect(httpResponse.statusCode).toBe(500)
         expect(httpResponse.body).toEqual({
             error: 'Internal Server Error'
-        });
-    });
+        })
+    })
 
     it('Should return 400 if email is invalid', () => {
-        const { sut, emailValidatorSpy } = makeSut();
+        const { sut, emailValidatorSpy } = makeSut()
 
         jest.spyOn(emailValidatorSpy, 'isValid').mockReturnValue(false)
 
@@ -149,11 +152,25 @@ describe('Customer Router', () => {
                 name: 'any_name',
                 email: 'invalid_email',
             },
-        };
+        }
 
-        const httpResponse = sut.route(httpRequest);
+        const httpResponse = sut.route(httpRequest)
 
-        expect(httpResponse.statusCode).toBe(400);
-        expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
-    });
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
+    })
+
+    it('Should call EmailValidator with correct email', () => {
+        const { sut, emailValidatorSpy } = makeSut()
+
+        const httpRequest = {
+            body: {
+                name: 'any_name',
+                email: 'invalid_emailxs',
+            },
+        }
+
+        sut.route(httpRequest)
+        expect(emailValidatorSpy.email).toBe(httpRequest.body.email)
+    })
 })
