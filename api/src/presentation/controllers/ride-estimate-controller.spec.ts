@@ -1,7 +1,7 @@
 import { RideEstimate } from "@/domain/usecases/ride-estimate"
 import { RideEstimateController } from "./ride-estimate.controller"
 import { MissingParamError } from "../errors/missing-param-error"
-import { badRequest } from "../helpers/http-helper"
+import { badRequest, serverError } from "../helpers/http-helper"
 
 class RideUseCaseStub implements RideEstimate {
     async save(data: RideEstimate.Params): Promise<RideEstimate.Result> {
@@ -50,12 +50,12 @@ class RideUseCaseStub implements RideEstimate {
 }
 
 const makeSut = () => {
-    const rideUseCase = new RideUseCaseStub()
-    const sut = new RideEstimateController(rideUseCase)
+    const rideSpy = new RideUseCaseStub()
+    const sut = new RideEstimateController(rideSpy)
 
     return {
         sut,
-        rideUseCase,
+        rideSpy,
     }
 }
 
@@ -121,5 +121,22 @@ describe('RideEstimate Controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse).toEqual(badRequest(new MissingParamError('origin')))
+    })
+
+    it('Should return 500 if RideUseCase throws an unexpected error', async () => {
+        const { sut, rideSpy } = makeSut()
+
+        jest.spyOn(rideSpy, 'save').mockImplementationOnce(() => Promise.reject(new Error()))
+
+        const httpRequest = {
+            body: {
+                customer_id: 'any_customer_id',
+                origin: 'any_origin',
+                destination: 'any_destination'
+            }
+        }
+
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse).toEqual(serverError(new Error()))
     })
 })
