@@ -1,30 +1,8 @@
 import { EmailValidator } from "@/validators/protocols/email-validator"
-import { badRequest, ok, serverError } from "../helpers/http-helper"
+import { badRequest } from "../helpers/http-helper"
 import { AddCustomer } from "@/domain/usecases/add-customer"
-import { Controller, HttpRequest, HttpResponse } from "../protocols"
 import { InvalidParamError } from "../errors"
-
-class AddCustomerController implements Controller {
-    constructor(
-        private readonly addCustomerUseCase: AddCustomer,
-        private readonly validation: EmailValidator
-    ) { }
-
-    async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-        try {
-            const body = httpRequest.body as AddCustomer.Params
-
-            if (!this.validation.isValid(body.email)) {
-                return badRequest(new InvalidParamError('email'))
-            }
-
-            const result = await this.addCustomerUseCase.save(body)
-            return ok(result)
-        } catch (error) {
-            return serverError()
-        }
-    }
-}
+import { AddCustomerController } from "./add-customer.controller"
 
 const makeSut = () => {
     const emailValidatorSpy = makeEmailValidator()
@@ -133,7 +111,7 @@ describe('AddCustomer Controller', () => {
         const httpRequest = {
             body: {
                 name: 'any_name',
-                email: 'any_email' 
+                email: 'any_email'
             }
         }
 
