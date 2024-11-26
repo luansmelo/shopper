@@ -21,7 +21,7 @@ export class AddCustomerController implements Controller {
             const result = await this.addCustomerUseCase.save(body)
             return ok(result)
         } catch (error) {
-            return serverError()
+            return serverError(error)
         }
     }
 }

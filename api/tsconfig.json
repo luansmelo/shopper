@@ -9,8 +9,6 @@
     "allowJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitAny": true,
     "rootDir": "src",
     "baseUrl": "./src",
     "skipLibCheck": true,

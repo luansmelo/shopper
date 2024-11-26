@@ -27,7 +27,7 @@ export class LoadCustomerByEmailController implements Controller {
 
             return ok(result)
         } catch (error) {
-            return serverError()
+            return serverError(error)
         }
     }
 }

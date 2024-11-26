@@ -21,7 +21,7 @@ export class RideEstimateController implements Controller {
 
             return ok(result)
         } catch (error) {
-            return serverError()
+            return serverError(error)
         }
     }
 }
