@@ -10,7 +10,7 @@ export class RideEstimateController implements Controller {
         try {
             const body = httpRequest.body as RideEstimate.Params
 
-            const requiredFields: Array<keyof RideEstimate.Params> = ['customer_id', 'origin', 'destination']
+            const requiredFields = ['customer_id', 'origin', 'destination']
             for (const field of requiredFields) {
                 if (!body[field]) {
                     return badRequest(new MissingParamError(field))

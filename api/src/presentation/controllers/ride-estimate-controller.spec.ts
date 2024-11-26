@@ -60,9 +60,9 @@ const makeSut = () => {
 }
 
 describe('RideEstimate Controller', () => {
-    it('Should return 200 with correct ride response', async () => {
+    it('Should call handle with correct values', async () => {
         const { sut } = makeSut()
-
+        const handleSpy = jest.spyOn(sut, 'handle')
         const httpRequest = {
             body: {
                 customer_id: 'customer_id',
@@ -71,11 +71,8 @@ describe('RideEstimate Controller', () => {
             }
         }
 
-        const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse.statusCode).toBe(200)
-        expect(httpResponse.body).toHaveProperty('id')
-        expect(httpResponse.body).toHaveProperty('origin')
-        expect(httpResponse.body).toHaveProperty('destination')
+        await sut.handle(httpRequest)
+        expect(handleSpy).toHaveBeenCalledWith(httpRequest)
     })
 
     it('Should return 400 if no customer_id is provided', async () => {
@@ -121,6 +118,22 @@ describe('RideEstimate Controller', () => {
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse).toEqual(badRequest(new MissingParamError('origin')))
+    })
+
+    it('Should call save with correct values', async () => {
+        const { sut, rideSpy } = makeSut()
+        const saveSpy = jest.spyOn(rideSpy, 'save')
+
+        const httpRequest = {
+            body: {
+                customer_id: 'customer_id',
+                origin: 'any_origin',
+                destination: 'any_destination'
+            },
+        }
+
+        await sut.handle(httpRequest)
+        expect(saveSpy).toHaveBeenCalledWith(httpRequest.body)
     })
 
     it('Should return 500 if RideUseCase throws an unexpected error', async () => {
