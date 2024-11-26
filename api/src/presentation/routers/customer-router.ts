@@ -13,7 +13,7 @@ export class CustomerRouter {
 
     route(httpRequest: HttpRequest): HttpResponse {
         try {
-            const body = httpRequest.body as { email?: string; name?: string };
+            const body = httpRequest.body as { email?: string, name?: string }
 
             if (!body.email) {
                 return badRequest(new MissingParamError('email'))
