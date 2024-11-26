@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
-    "test:staged": "jest --passWithNoTests",
+    "test": "jest --silent --colors --noStackTrace --passWithNoTests",
+    "test:unit": "npm test -- --watch -c jest-unit.config.ts",
+    "test:integration": "npm test -- --watch -c jest-integration.config.ts",
+    "test:staged": "npm test --findRelatedTests",
     "prepare": "husky",
     "lint": "eslint"
   },
   "lint-staged": {
     "*.ts": [
-        "eslint 'src/**' --fix --no-error-on-unmatched-pattern"
+      "eslint 'src/**' --fix --no-error-on-unmatched-pattern"
     ]
   },
   "keywords": [],
@@ -31,5 +33,9 @@
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.16.0"
+  },
+  "dependencies": {
+    "@types/validator": "^13.12.2",
+    "validator": "^13.12.0"
   }
 }
