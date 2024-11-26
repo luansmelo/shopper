@@ -1,25 +1,42 @@
+import { EmailValidator } from "@/validators/protocols/email-validator"
 import { MissingParamError } from "../errors/missing-param-error"
 import { badRequest } from "../helpers/http-helper"
 import { CustomerRouter } from "./customer-router"
-
-export class CustomerUseCaseSpy {
-    public email!: string
-    public name!: string
-
-    save(email: string, name: string) {
-        this.email = email
-        this.name = name
-    }
-}
+import { InvalidParamError } from "../errors/invalid-param-error"
 
 const makeSut = () => {
-    const customerUseCaseSpy = new CustomerUseCaseSpy()
-    const sut = new CustomerRouter(customerUseCaseSpy)
+    const emailValidatorSpy = makeEmailValidator()
+    const customerUseCaseSpy = makeCustomerUseCaseSpy()
+    const sut = new CustomerRouter(customerUseCaseSpy, emailValidatorSpy)
 
     return {
         sut,
+        emailValidatorSpy,
         customerUseCaseSpy
     }
+}
+
+const makeCustomerUseCaseSpy = () => {
+    class CustomerUseCaseSpy {
+        public email!: string
+        public name!: string
+
+        save(email: string, name: string) {
+            this.email = email
+            this.name = name
+        }
+    }
+    return new CustomerUseCaseSpy()
+}
+
+const makeEmailValidator = () => {
+    class EmailValidatorSpy implements EmailValidator {
+        isValid(input: unknown): boolean {
+            return true
+        }
+    }
+
+    return new EmailValidatorSpy()
 }
 
 const makeCustomerUseCaseSpyWithError = () => {
@@ -28,7 +45,6 @@ const makeCustomerUseCaseSpyWithError = () => {
             throw new Error();
         }
     }
-
     return new CustomerUseCaseSpyWithError()
 }
 
@@ -44,7 +60,7 @@ describe('Customer Router', () => {
         }
 
         const httpResponse = sut.route(httpRequest)
-        
+
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse).toEqual(badRequest(new MissingParamError('email')));
     })
@@ -106,7 +122,7 @@ describe('Customer Router', () => {
 
     it('Should return 500 if CustomerUseCase throws', () => {
         const customerUseCaseSpy = makeCustomerUseCaseSpyWithError()
-        const sut = new CustomerRouter(customerUseCaseSpy)
+        const sut = new CustomerRouter(customerUseCaseSpy, makeEmailValidator())
 
         const httpRequest = {
             body: {
@@ -121,5 +137,23 @@ describe('Customer Router', () => {
         expect(httpResponse.body).toEqual({
             error: 'Internal Server Error'
         });
+    });
+
+    it('Should return 400 if email is invalid', () => {
+        const { sut, emailValidatorSpy } = makeSut();
+
+        jest.spyOn(emailValidatorSpy, 'isValid').mockReturnValue(false)
+
+        const httpRequest = {
+            body: {
+                name: 'any_name',
+                email: 'invalid_email',
+            },
+        };
+
+        const httpResponse = sut.route(httpRequest);
+
+        expect(httpResponse.statusCode).toBe(400);
+        expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
     });
 })
