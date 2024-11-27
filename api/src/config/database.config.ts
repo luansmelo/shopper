@@ -1,3 +1,4 @@
+import { CustomerModel } from "@/infra/db/models/customer";
 import { Sequelize } from "sequelize-typescript";
 
 export const sequelize = new Sequelize({
@@ -6,5 +7,6 @@ export const sequelize = new Sequelize({
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     port: Number(process.env.DB_PORT),
-    database: process.env.DB_NAME
-});
+    database: process.env.DB_NAME,
+    models: [CustomerModel],
+})
