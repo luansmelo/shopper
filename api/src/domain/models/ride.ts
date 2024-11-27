@@ -11,7 +11,7 @@ export type RideModel = {
         destination_lon: number
     }
     distance: number
-    duration: number
+    duration: string
     options: DriverModel[]
     routeResponse: object
 }

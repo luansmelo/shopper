@@ -4,7 +4,7 @@ export type DriverModel = {
     description: string
     car: string
     review: {
-        rating: number
+        rating: string
         comment: string
     }
     value: number
