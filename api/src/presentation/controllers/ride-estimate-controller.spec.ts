@@ -17,7 +17,7 @@ class RideUseCaseStub implements RideEstimate {
                     id: 'driver_1',
                     name: 'John Doe',
                     description: 'Motorista experiente',
-                    car: 'Toyota Corolla 2020',
+                    vehicle: 'Toyota Corolla 2020',
                     review: { rating: '2/5', comment: 'Muito bom!' },
                     value: 2.50
                 },
@@ -25,7 +25,7 @@ class RideUseCaseStub implements RideEstimate {
                     id: 'driver_2',
                     name: 'John Jash',
                     description: 'Motorista muito bom de corrida',
-                    car: 'Camaro Amarelo 2019',
+                    vehicle: 'Camaro Amarelo 2019',
                     review: { rating: '4/0', comment: 'Muito querido pelos passageiros!' },
                     value: 5.00
                 }

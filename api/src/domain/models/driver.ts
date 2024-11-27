@@ -2,7 +2,7 @@ export type DriverModel = {
     id: string
     name: string
     description: string
-    car: string
+    vehicle: string
     review: {
         rating: string
         comment: string

@@ -23,9 +23,10 @@ export class RideEstimateController implements Controller {
             }
 
             const result = await this.rideUseCase.save(body)
-
+           
             return ok(result)
         } catch (error) {
+            console.error('Error fetching route data:', error.response ? error.response.data : error.message);
             return serverError(error)
         }
     }

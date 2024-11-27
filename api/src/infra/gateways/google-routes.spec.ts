@@ -1,14 +1,14 @@
 import { MockHttpClient } from "@/data/mocks/http-client.mock"
 import { GoogleRoutesProtocol } from "../protocols/google.routes-protocol"
-import { GoogleRoutesService } from "./google.routes.service"
+import { GoogleRoutesGateway } from "./google-routes"
 
-describe('GoogleRoutesService', () => {
-    let googleRoutesService: GoogleRoutesService
+describe('GoogleRoutesGateway', () => {
+    let googleRoutesGateway: GoogleRoutesGateway
     let mockHttpClient: MockHttpClient
 
     beforeEach(() => {
         mockHttpClient = new MockHttpClient()
-        googleRoutesService = new GoogleRoutesService(mockHttpClient)
+        googleRoutesGateway = new GoogleRoutesGateway(mockHttpClient)
     })
 
     it('Should return route data with distance, duration, and locations', async () => {
@@ -47,7 +47,7 @@ describe('GoogleRoutesService', () => {
             destination: 'Belo Horizonte'
         }
 
-        const result = await googleRoutesService.load(params)
+        const result = await googleRoutesGateway.load(params)
 
         const route = result.routes[0]
         const leg = route.legs[0]
@@ -72,6 +72,6 @@ describe('GoogleRoutesService', () => {
             destination: 'Belo Horizonte'
         }
 
-        await expect(googleRoutesService.load(params)).rejects.toThrow('Simulated error')
+        await expect(googleRoutesGateway.load(params)).rejects.toThrow('Simulated error')
     })
 })

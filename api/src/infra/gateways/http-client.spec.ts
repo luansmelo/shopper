@@ -1,15 +1,15 @@
 import { HttpClientProtocol } from '../protocols/http-client-protocol'
-import { HttpClientAdapter } from './http-client.adpter'
+import { AxiosHttpClient } from './http-client'
 import axios from 'axios'
 
 const makeSut = () => {
-    const sut = new HttpClientAdapter()
+    const sut = new AxiosHttpClient()
     return {
         sut
     }
 }
 
-describe('HttpClientAdapter', () => {
+describe('AxiosHttpClient', () => {
     it('Should call axios with correct parameters', async () => {
         const { sut } = makeSut()
 
