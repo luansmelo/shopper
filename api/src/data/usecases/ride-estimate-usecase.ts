@@ -1,8 +1,8 @@
 import { RideEstimate } from "@/domain/usecases/ride-estimate"
 import { LoadDriversRepositoryProtocol } from "../protocols/db/load-driver.repository"
 import { GoogleRoutesProtocol } from "@/infra/protocols/google.routes-protocol"
-import { NoAvailableDriversError } from "@/domain/errors/no-available-drivers-error"
-import { v4 as uuidV4 } from "uuid"
+import { NoAvailableDriversError } from "@/presentation/errors"
+
 export class RideEstimateUseCase implements RideEstimate {
     constructor(
         private readonly loadDriverRepository: LoadDriversRepositoryProtocol,
@@ -30,14 +30,13 @@ export class RideEstimateUseCase implements RideEstimate {
             throw new NoAvailableDriversError('No drivers available for the requested distance.')
 
         return {
-            id: uuidV4(),
             origin: {
-                origin_lat: startLocation.latLng.latitude,
-                origin_lon: startLocation.latLng.longitude
+                latitude: startLocation.latLng.latitude,
+                longitude: startLocation.latLng.longitude
             },
             destination: {
-                destination_lat: endLocation.latLng.latitude,
-                destination_lon: endLocation.latLng.longitude
+                latitude: endLocation.latLng.latitude,
+                longitude: endLocation.latLng.longitude
             },
             distance: calculateRoute,
             duration: localizedValues.duration.text,
@@ -47,7 +46,7 @@ export class RideEstimateUseCase implements RideEstimate {
                 description: driver.description,
                 vehicle: driver.car,
                 review: {
-                    rating: driver.rating,
+                    rating: Number(driver.rating.replace('/', '.')),
                     comment: driver.comment
                 },
                 value: driver.rate_per_km * calculateRoute,

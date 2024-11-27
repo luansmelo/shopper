@@ -1,10 +1,10 @@
 export type DriverModel = {
-    id: string
+    id: number
     name: string
     description: string
     vehicle: string
     review: {
-        rating: string
+        rating: number
         comment: string
     }
     value: number

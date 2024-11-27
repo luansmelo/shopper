@@ -2,7 +2,8 @@ import { RideEstimate } from "@/domain/usecases/ride-estimate"
 import { badRequest, ok, serverError } from "../helpers/http-helper"
 import { Controller, HttpRequest, HttpResponse } from "../protocols"
 import { MissingParamError } from "../errors/missing-param-error"
-import { OriginEqualsDestinationError } from "@/domain/errors"
+import { OriginEqualsDestinationError } from "../errors"
+import { errorHandler } from "../helpers/handlers/error-handler"
 
 export class RideEstimateController implements Controller {
     constructor(private readonly rideUseCase: RideEstimate) { }
@@ -23,11 +24,10 @@ export class RideEstimateController implements Controller {
             }
 
             const result = await this.rideUseCase.save(body)
-           
+
             return ok(result)
         } catch (error) {
-            console.error('Error fetching route data:', error.response ? error.response.data : error.message);
-            return serverError(error)
+            return errorHandler(error)
         }
     }
 }

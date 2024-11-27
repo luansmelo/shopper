@@ -1,37 +1,37 @@
-import { Table, Column, Model, DataType, PrimaryKey, ForeignKey, BelongsTo } from "sequelize-typescript";
-import { CustomerModel } from "./customer";
+import { Table, Column, Model, DataType, PrimaryKey, ForeignKey, BelongsTo, AutoIncrement } from "sequelize-typescript"
+import { CustomerModel } from "./customer"
 
 @Table({ tableName: "ride", timestamps: true })
 export class RideModel extends Model {
     @PrimaryKey
+    @AutoIncrement
     @Column({
-        type: DataType.UUID,
-        defaultValue: DataType.UUIDV4,
+        type: DataType.INTEGER,
     })
-    id!: string;
+    id!: number
 
     @ForeignKey(() => CustomerModel)
-    @Column({ type: DataType.UUID, allowNull: false })
-    customer_id!: string;
+    @Column({ type: DataType.INTEGER, allowNull: false })
+    customer_id!: number
 
     @BelongsTo(() => CustomerModel)
-    customer!: CustomerModel;
+    customer!: CustomerModel
 
     @Column({ type: DataType.DECIMAL, allowNull: false })
-    origin_lat!: number;
+    origin_lat!: number
 
     @Column({ type: DataType.DECIMAL, allowNull: false })
-    origin_lon!: number;
+    origin_lon!: number
 
     @Column({ type: DataType.DECIMAL, allowNull: false })
-    destination_lat!: number;
+    destination_lat!: number
 
     @Column({ type: DataType.DECIMAL, allowNull: false })
-    destination_lon!: number;
+    destination_lon!: number
 
     @Column({ type: DataType.DECIMAL, allowNull: false })
-    distance!: number;
+    distance!: number
 
     @Column({ type: DataType.STRING, allowNull: false })
-    duration!: string;
+    duration!: string
 }

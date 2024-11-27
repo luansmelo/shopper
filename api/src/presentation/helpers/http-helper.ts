@@ -1,15 +1,16 @@
-import { CustomError } from "@/domain/errors";
-import { ServerError } from "../errors/server-error";
+import { CustomError } from "../errors";
 import { HttpResponse } from "../protocols/http-response.protocol";
 
 export const badRequest = (error: CustomError): HttpResponse => ({
     statusCode: 400,
-    body: error
+    body: error 
 })
 
-export const serverError = (error: Error): HttpResponse => ({
+export const serverError = (): HttpResponse => ({
     statusCode: 500,
-    body: new ServerError(error.stack!)
+    body: {
+        error: 'Erro interno do servidor'
+    }
 })
 
 export const ok = (body: unknown): HttpResponse => ({

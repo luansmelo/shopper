@@ -1,8 +1,9 @@
 import { AddCustomer } from "@/domain/usecases/add-customer"
 import { Controller, HttpRequest, HttpResponse } from "../protocols"
 import { EmailValidator } from "@/validations/protocols/email-validator"
-import { badRequest, ok, serverError } from "../helpers/http-helper"
-import { InvalidParamError } from "../errors"
+import { badRequest, ok } from "../helpers/http-helper"
+import { errorHandler } from "../helpers/handlers/error-handler"
+import { InvalidParamError } from "../errors/invalid-param-error"
 
 export class AddCustomerController implements Controller {
     constructor(
@@ -21,7 +22,7 @@ export class AddCustomerController implements Controller {
             const result = await this.addCustomerUseCase.save(body)
             return ok(result)
         } catch (error) {
-            return serverError(error)
+            return errorHandler(error)
         }
     }
 }

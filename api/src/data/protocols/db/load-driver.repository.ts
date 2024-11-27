@@ -4,7 +4,7 @@ export interface LoadDriversRepositoryProtocol {
 
 export namespace LoadDriversRepositoryProtocol {
     export type Result = {
-        id: string
+        id: number
         name: string
         description: string
         car: string

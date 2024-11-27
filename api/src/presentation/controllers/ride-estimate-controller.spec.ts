@@ -2,31 +2,30 @@ import { RideEstimate } from '@/domain/usecases/ride-estimate'
 import { RideEstimateController } from './ride-estimate.controller'
 import { MissingParamError } from '../errors/missing-param-error'
 import { badRequest, serverError } from '../helpers/http-helper'
-import { OriginEqualsDestinationError } from '@/domain/errors'
+import { OriginEqualsDestinationError } from '../errors'
 
 class RideUseCaseStub implements RideEstimate {
     async save(data: RideEstimate.Params): Promise<RideEstimate.Result> {
         return new Promise(resolve => resolve({
-            id: 'ride_123',
-            origin: { origin_lat: 40.712776, origin_lon: -74.005974 },
-            destination: { destination_lat: 40.730610, destination_lon: -73.935242 },
+            origin: { latitude: 40.712776, longitude: -74.005974 },
+            destination: { latitude: 40.730610, longitude: -73.935242 },
             distance: 1000,
             duration: '7699s',
             options: [
                 {
-                    id: 'driver_1',
+                    id: 1,
                     name: 'John Doe',
                     description: 'Motorista experiente',
                     vehicle: 'Toyota Corolla 2020',
-                    review: { rating: '2/5', comment: 'Muito bom!' },
+                    review: { rating: 2.5, comment: 'Muito bom!' },
                     value: 2.50
                 },
                 {
-                    id: 'driver_2',
+                    id: 2,
                     name: 'John Jash',
                     description: 'Motorista muito bom de corrida',
                     vehicle: 'Camaro Amarelo 2019',
-                    review: { rating: '4/0', comment: 'Muito querido pelos passageiros!' },
+                    review: { rating: 4.0, comment: 'Muito querido pelos passageiros!' },
                     value: 5.00
                 }
             ],
@@ -151,7 +150,7 @@ describe('RideEstimate Controller', () => {
         }
 
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse).toEqual(serverError(new Error()))
+        expect(httpResponse).toEqual(serverError())
     })
 
     it('Should return 400 if origin and destination are the same', async () => {

@@ -1,14 +1,14 @@
 import { DriverModel } from "./driver"
 
 export type RideModel = {
-    id: string
+    id?: number
     origin: {
-        origin_lat: number
-        origin_lon: number
+        latitude: number
+        longitude: number
     }
     destination: {
-        destination_lat: number
-        destination_lon: number
+        latitude: number
+        longitude: number
     }
     distance: number
     duration: string

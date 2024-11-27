@@ -1,8 +1,8 @@
 import { EmailValidator } from "@/validations/protocols/email-validator"
 import { badRequest } from "../helpers/http-helper"
 import { AddCustomer } from "@/domain/usecases/add-customer"
-import { InvalidParamError } from "../errors"
 import { AddCustomerController } from "./add-customer.controller"
+import { InvalidParamError } from "../errors/invalid-param-error"
 
 const makeSut = () => {
     const emailValidatorSpy = makeEmailValidator()
@@ -101,6 +101,7 @@ describe('AddCustomer Controller', () => {
                 email: 'any email'
             },
         }
+        
         const httpResponse = await sut.handle(httpRequest)
         expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
     })

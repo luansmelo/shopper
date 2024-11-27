@@ -6,7 +6,7 @@ export interface RideEstimate {
 
 export namespace RideEstimate {
     export type Params = {
-        customer_id: string,
+        customer_id: number,
         origin: string,
         destination: string
     }

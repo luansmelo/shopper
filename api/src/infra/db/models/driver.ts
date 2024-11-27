@@ -1,13 +1,13 @@
-import { Table, Column, Model, DataType, PrimaryKey } from "sequelize-typescript"
+import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from "sequelize-typescript"
 
 @Table({ tableName: "driver", timestamps: true })
 export class DriverModel extends Model {
     @PrimaryKey
+    @AutoIncrement
     @Column({
-        type: DataType.UUID,
-        defaultValue: DataType.UUIDV4,
+        type: DataType.INTEGER, 
     })
-    id!: string
+    id!: number
 
     @Column({ type: DataType.STRING, allowNull: false })
     name!: string

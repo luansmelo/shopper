@@ -1,3 +1,4 @@
+import { NoRoutesFoundError } from "@/presentation/errors"
 import { GoogleRoutesProtocol } from "../protocols/google.routes-protocol"
 import { HttpClientProtocol, HttpMethod } from "../protocols/http-client-protocol"
 
@@ -22,25 +23,29 @@ export class GoogleRoutesGateway implements GoogleRoutesProtocol {
                 destination: {
                     address: params.destination
                 },
-                travelMode:'DRIVE'
+                travelMode: 'DRIVE'
             }
         }
+        try {
+            const response = await this.httpClient.request(requestParams)
 
-        const response = await this.httpClient.request(requestParams)
-        console.log(response)
-        const routes = response.data.routes.map(route => ({
-            legs: route.legs.map(leg => ({
-                distanceMeters: leg.distanceMeters,
-                duration: leg.duration,
-                startLocation: leg.startLocation,
-                endLocation: leg.endLocation,
-                localizedValues: leg.localizedValues,
+            if (!response?.data.routes) {
+                throw new NoRoutesFoundError()
+            }
+
+            const routes = response.data.routes.map(route => ({
+                legs: route.legs.map(leg => ({
+                    distanceMeters: leg.distanceMeters,
+                    duration: leg.duration,
+                    startLocation: leg.startLocation,
+                    endLocation: leg.endLocation,
+                    localizedValues: leg.localizedValues,
+                }))
             }))
-        }))
 
-        return { routes }
-    } catch(error) {
-        console.error('Error fetching route data:', error.response ? error.response.data : error.message);
-        throw new Error(error.response && error.response.data)
+            return { routes }
+        } catch (error) {
+            throw error
+        }
     }
 }

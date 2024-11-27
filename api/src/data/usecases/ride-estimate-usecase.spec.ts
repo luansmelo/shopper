@@ -2,13 +2,13 @@ import { RideEstimate } from "@/domain/usecases/ride-estimate"
 import { LoadDriversRepositoryProtocol } from "../protocols/db/load-driver.repository"
 import { RideEstimateUseCase } from "./ride-estimate-usecase"
 import { GoogleRoutesProtocol } from "@/infra/protocols/google.routes-protocol"
-import { NoAvailableDriversError } from "@/domain/errors/no-available-drivers-error"
+import { NoAvailableDriversError } from "@/presentation/errors"
 
 class LoadDriverRepositorySpy implements LoadDriversRepositoryProtocol {
     async load(): Promise<LoadDriversRepositoryProtocol.Result[]> {
         return new Promise(resolve => resolve([
             {
-                id: 'driver_1',
+                id: 1,
                 name: 'Homer simpson',
                 description: `Olá! Sou o Homer, seu motorista camarada!
                               Relaxe e aproveite o passeio, com direito a rosquinhas e
@@ -20,7 +20,7 @@ class LoadDriverRepositorySpy implements LoadDriversRepositoryProtocol {
                 min_km: 1
             },
             {
-                id: 'driver_2',
+                id: 2,
                 name: 'Dominic Toretto',
                 description: `Ei, aqui é o Dom. Pode entrar,
                               vou te levar com segurança e rapidez ao seu
@@ -35,7 +35,7 @@ class LoadDriverRepositorySpy implements LoadDriversRepositoryProtocol {
                 min_km: 5
             },
             {
-                id: 'driver_3',
+                id: 3,
                 name: 'James Bond',
                 description: `Boa noite, sou
                               James Bond. À seu dispor para um passeio
@@ -97,7 +97,7 @@ describe('RideEstimate UseCase', () => {
         const { sut } = makeSut()
 
         const rideData: RideEstimate.Params = {
-            customer_id: 'customer_123',
+            customer_id: 1,
             origin: 'São Paulo',
             destination: 'Campinas',
         }
@@ -114,7 +114,7 @@ describe('RideEstimate UseCase', () => {
         const { sut } = makeSut()
 
         const rideData: RideEstimate.Params = {
-            customer_id: 'customer_123',
+            customer_id: 1,
             origin: 'São Paulo',
             destination: 'Campinas',
         }
@@ -130,7 +130,7 @@ describe('RideEstimate UseCase', () => {
         const { sut, googleApiRouteServiceSpy } = makeSut()
 
         const rideData: RideEstimate.Params = {
-            customer_id: 'customer_123',
+            customer_id: 1,
             origin: 'São Paulo',
             destination: 'Belo Horizonte',
         }
@@ -164,7 +164,7 @@ describe('RideEstimate UseCase', () => {
         const { sut } = makeSut()
 
         const rideData: RideEstimate.Params = {
-            customer_id: 'customer_123',
+            customer_id: 1,
             origin: 'São Paulo',
             destination: 'Interior',
         }

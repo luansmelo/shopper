@@ -4,7 +4,8 @@ import { InvalidParamError } from "../errors/invalid-param-error";
 import { MissingParamError } from "@/presentation/errors/missing-param-error";
 import { LoadCustomerByEmail } from "@/domain/usecases/load-customer-by-email";
 import { Controller, HttpRequest, HttpResponse } from "../protocols";
-import { CustomerNotFoundError } from "@/domain/errors";
+import { CustomerNotFoundError } from "../errors";
+import { errorHandler } from "../helpers/handlers/error-handler";
 
 export class LoadCustomerByEmailController implements Controller {
     constructor(
@@ -31,8 +32,7 @@ export class LoadCustomerByEmailController implements Controller {
 
             return ok(customer)
         } catch (error) {
-            console.log(error)
-            return serverError(error)
+            return errorHandler(error)
         }
     }
 }
