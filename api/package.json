@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/main/config/app.js",
+    "start": "node dist/main/server.js",
     "build": "rm -rf dist && tsc -p tsconfig-build.json",
     "test": "jest --silent --colors --noStackTrace --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit.config.ts",
@@ -44,9 +44,13 @@
     "@types/validator": "^13.12.2",
     "axios": "^1.7.8",
     "express": "^4.21.1",
+    "module-alias": "^2.2.3",
     "sequelize": "^6.37.5",
     "sequelize-typescript": "^2.1.6",
     "sqlite3": "^5.1.7",
     "validator": "^13.12.0"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }
