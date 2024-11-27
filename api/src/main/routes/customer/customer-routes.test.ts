@@ -23,8 +23,16 @@ describe('Customer Routes', () => {
                 .send({
                     name: 'any_name',
                     email: 'any_email@hotmail.com'
-                })
-                .expect(200)
+                }).expect(200)
+        })
+
+        it('Should return 400 if email is invalid', async () => {
+            await request(app)
+                .post('/api/customers')
+                .send({
+                    name: 'any_name',
+                    email: 'invalid_email'
+                }).expect(400)
         })
     })
 })
