@@ -22,20 +22,13 @@ const makeSut = () => {
 }
 
 describe('LoadCustomerByEmail UseCase', () => {
-    it('Should throw if no email is provided', async () => {
-        const { sut } = makeSut()
-        const promise = sut.load('')
-        expect(promise).rejects.toThrow()
-    })
-
-    it('Should throw if no customer no found', async () => {
+    it('Should return null if LoadCustomerByEmailRepository returns null', async () => {
         const { sut, loadCustomerByEmailRepository } = makeSut()
-        jest.spyOn(loadCustomerByEmailRepository, 'load').mockImplementationOnce(() => {
-            throw new Error()
-        })
 
-        const promise = sut.load('email_fake@mail.com')
-        expect(promise).rejects.toThrow()
+        jest.spyOn(loadCustomerByEmailRepository, 'load').mockImplementationOnce(() => null)
+        
+        const model = await sut.load('email_fake@mail.com')
+        expect(model).toBeNull()
     })
 
     it('Should call LoadCustomerByEmailRepository with correct email', async () => {
@@ -46,7 +39,7 @@ describe('LoadCustomerByEmail UseCase', () => {
         expect(load?.email).toBe('any_email')
     })
 
-    it('Should return customer data when email is provided', async () => {
+    it('Should return a customer on sucess', async () => {
         const { sut } = makeSut()
 
         const customer = await sut.load('any_email')

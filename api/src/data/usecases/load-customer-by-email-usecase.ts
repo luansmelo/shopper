@@ -1,16 +1,13 @@
-import { MissingParamError } from "@/presentation/errors/missing-param-error"
+import { CustomerModel } from "@/domain/models/customer"
 import { LoadCustomerByEmailRepositoryProtocol } from "../protocols/db/load-customer-by-email.repository"
 import { LoadCustomerByEmail } from "@/domain/usecases/load-customer-by-email"
 
 export class LoadCustomerByEmailUseCase implements LoadCustomerByEmail {
     constructor(private readonly repository: LoadCustomerByEmailRepositoryProtocol) { }
 
-    async load(email: string) {
-        if (!email) throw new MissingParamError('email')
-
+    async load(email: string): Promise<CustomerModel | null> {
         const customer = await this.repository.load(email)
-
-        if (!customer) throw new Error('Customer not found')
+        if (!customer) return null
         return customer
     }
 }
