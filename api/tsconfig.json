@@ -4,7 +4,6 @@
     "module": "commonjs",
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "sourceMap": true,
     "outDir": "./dist",
     "allowJs": true,
     "esModuleInterop": true,
