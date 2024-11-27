@@ -1,9 +1,9 @@
-import { LoadCustomerRepository } from "./customer.repository";
+import { CustomerRepository } from "./customer.repository";
 import { CustomerModel } from "./models/customer";
 import { Sequelize } from "sequelize-typescript";
 
 const makeSut = () => {
-    const sut = new LoadCustomerRepository()
+    const sut = new CustomerRepository()
     return {
         sut
     }

@@ -1,4 +1,4 @@
-import { EmailValidator } from "@/validators/protocols/email-validator";
+import { EmailValidator } from "@/validations/protocols/email-validator";
 import { badRequest, ok, serverError } from "../helpers/http-helper";
 import { InvalidParamError } from "../errors/invalid-param-error";
 import { MissingParamError } from "@/presentation/errors/missing-param-error";

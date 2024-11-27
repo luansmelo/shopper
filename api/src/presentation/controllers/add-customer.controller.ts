@@ -1,6 +1,6 @@
 import { AddCustomer } from "@/domain/usecases/add-customer"
 import { Controller, HttpRequest, HttpResponse } from "../protocols"
-import { EmailValidator } from "@/validators/protocols/email-validator"
+import { EmailValidator } from "@/validations/protocols/email-validator"
 import { badRequest, ok, serverError } from "../helpers/http-helper"
 import { InvalidParamError } from "../errors"
 
