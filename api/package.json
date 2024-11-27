@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node dist/main/config/app.js",
+    "build": "rm -rf dist && tsc -p tsconfig-build.json",
     "test": "jest --silent --colors --noStackTrace --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit.config.ts",
-    "test:integration": "npm test -- --watch -c jest-integration.config.ts",
+    "test:integration": "npm test -- --watch --detectOpenHandles -c jest-integration.config.ts",
     "test:staged": "npm test --findRelatedTests",
     "prepare": "husky",
     "lint": "eslint"
