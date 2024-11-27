@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:15
+    container_name: shopper_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: tiger
+      POSTGRES_PASSWORD: o61QpN7!4YZ.hhe
+      POSTGRES_DB: shopper
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
