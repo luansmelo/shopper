@@ -11,14 +11,14 @@ class RideUseCaseStub implements RideEstimate {
             origin: { origin_lat: 40.712776, origin_lon: -74.005974 },
             destination: { destination_lat: 40.730610, destination_lon: -73.935242 },
             distance: 1000,
-            duration: 15,
+            duration: '7699s',
             options: [
                 {
                     id: 'driver_1',
                     name: 'John Doe',
                     description: 'Motorista experiente',
                     car: 'Toyota Corolla 2020',
-                    review: { rating: 2.5, comment: 'Muito bom!' },
+                    review: { rating: '2/5', comment: 'Muito bom!' },
                     value: 2.50
                 },
                 {
@@ -26,7 +26,7 @@ class RideUseCaseStub implements RideEstimate {
                     name: 'John Jash',
                     description: 'Motorista muito bom de corrida',
                     car: 'Camaro Amarelo 2019',
-                    review: { rating: 4.0, comment: 'Muito querido pelos passageiros!' },
+                    review: { rating: '4/0', comment: 'Muito querido pelos passageiros!' },
                     value: 5.00
                 }
             ],
