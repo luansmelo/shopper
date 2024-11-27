@@ -1,6 +1,7 @@
-export class OriginEqualsDestinationError extends Error {
+import { CustomError } from "./custom-error";
+
+export class OriginEqualsDestinationError extends CustomError {
     constructor() {
-        super('Origin and destination cannot be the same');
-        this.name = 'OriginEqualsDestinationError';
+        super('ORIGIN_EQUALS_DESTINATION', 'Origin and destination cannot be the same');
     }
 }
