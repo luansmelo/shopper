@@ -35,4 +35,20 @@ describe('Customer Routes', () => {
                 }).expect(400)
         })
     })
+
+    describe('GET /api/customers', () => {
+        it('Should return a customer by email', async () => {
+            const customer = await CustomerModel.create({
+                name: 'any_name',
+                email: 'any_email@hotmail.com'
+            })
+
+            const response = await request(app)
+                .get(`/api/customers/${customer.email}`)
+                .expect(200)
+
+            expect(response.body).toHaveProperty('name', 'any_name')
+            expect(response.body).toHaveProperty('email', 'any_email@hotmail.com')
+        })
+    })
 })
