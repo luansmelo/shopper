@@ -1,5 +1,5 @@
 import { CustomerRepository } from "./customer.repository";
-import { CustomerModel } from "./models/customer";
+import { CustomerModel } from "../models/customer";
 import { Sequelize } from "sequelize-typescript";
 
 const makeSut = () => {

@@ -1,5 +1,5 @@
 import { LoadCustomerByEmailRepositoryProtocol } from "@/data/protocols/db/load-customer-by-email.repository"
-import { CustomerModel } from "./models/customer"
+import { CustomerModel } from "../models/customer"
 import { AddCustomerRepositoryProtocol } from "@/data/protocols"
 
 export class CustomerRepository implements AddCustomerRepositoryProtocol, LoadCustomerByEmailRepositoryProtocol {
