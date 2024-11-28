@@ -1,10 +1,10 @@
 import 'module-alias/register'
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 dotenv.config()
 import app from './config/app'
 import { sequelize } from '@/config/database.config'
 
-const port = Number(process.env.PORT) || 3000
+const port = Number(process.env.PORT) || 8080
 
 sequelize.sync().then(() => {
     app.listen(port, () => console.log(`Server running at ${port} port`))

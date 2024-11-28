@@ -11,7 +11,7 @@
     "test:staged": "npm test --findRelatedTests",
     "prepare": "husky",
     "lint": "eslint",
-    "db:seed": ""
+    "db:seed": "sequelize-cli db:seed:all"
   },
   "lint-staged": {
     "*.ts": [
@@ -25,6 +25,7 @@
   "devDependencies": {
     "@eslint/create-config": "^1.4.0",
     "@eslint/js": "^9.15.0",
+    "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/sequelize": "^4.28.20",
@@ -46,6 +47,7 @@
   "dependencies": {
     "@types/validator": "^13.12.2",
     "axios": "^1.7.8",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "module-alias": "^2.2.3",
     "pg": "^8.13.1",

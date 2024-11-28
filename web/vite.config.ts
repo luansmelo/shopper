@@ -7,6 +7,10 @@ export default ({ mode }: { mode: string }) => {
   const env = loadEnv(mode, path.resolve(__dirname, '..'), '') 
 
   return defineConfig({
+    server: {
+      port: 80,
+      host: '0.0.0.0'
+    },
     plugins: [react()],
     css: {
       postcss: './postcss.config.ts',
