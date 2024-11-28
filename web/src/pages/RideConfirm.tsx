@@ -14,13 +14,13 @@ const RideConfirmPage: React.FC = () => {
 
   useEffect(() => {
     if (!state) {
-      window.location.href = '/'
+      navigate('/')
     }
   }, [state])
 
   const confirm = async () => {
     if (!selectedDriver) return
-    
+
     const data = {
       customer_id: rideData.customer_id,
       origin: rideData.origin,
@@ -38,7 +38,7 @@ const RideConfirmPage: React.FC = () => {
 
     if (response.success) {
       navigate('/historico-viagens', {
-        state: { customer_id: rideData.customer_id, driver_id: selectedDriver.id }
+        state: { customer_id: rideData.customer_id, driver_id: selectedDriver.id }, replace: true
       })
     }
   }
