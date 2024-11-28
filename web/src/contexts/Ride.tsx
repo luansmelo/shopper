@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useState } from 'react'
 import { Ride, RideConfirmParams, RideConfirmResult, RideEstimateParams, RideResult, RidesParams } from '../services/ride.service'
+import { toast } from 'react-toastify'
 
 interface RideState {
     ride: RideResult,
@@ -29,8 +30,24 @@ export const RideProvider: React.FC<RideProviderProps> = ({ children }) => {
         try {
             const response = await Ride.create(body)
             return response
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            if (error?.response?.data?.error_code === 'NO_ROUTES_FOUND') {
+                toast.error("Nenhuma rota encontrada para a origem e destino informados.", {
+                    position: 'top-center',
+                    autoClose: 5000,
+                })
+            } else if (error?.response?.data?.error_code === 'ORIGIN_EQUALS_DESTINATION') {
+                toast.error("A origem e o destino não podem ser os mesmos.", {
+                    position: 'top-center',
+                    autoClose: 5000,
+                })
+            } else {
+                toast.error("Ocorreu um erro ao estimar a viagem. Tente novamente.", {
+                    position: 'top-center',
+                    autoClose: 5000,
+                })
+            }
+            throw error
         } finally {
             setLoading(false)
         }
@@ -43,7 +60,9 @@ export const RideProvider: React.FC<RideProviderProps> = ({ children }) => {
         } catch (error) {
             console.log(error)
         } finally {
-            setLoading(false)
+            setTimeout(() => {
+                setLoading(false)
+            }, 1500)
         }
     }
 
@@ -55,8 +74,8 @@ export const RideProvider: React.FC<RideProviderProps> = ({ children }) => {
             console.log(error)
         } finally {
             setTimeout(() => {
-                setLoading(false);
-            }, 1500);
+                setLoading(false)
+            }, 1500)
         }
     }
 

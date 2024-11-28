@@ -47,7 +47,7 @@ const create = async (data: RideEstimateParams) => {
         const response = await api.post('/ride/estimate', data)
         return response
     } catch (error) {
-        console.log(error)
+        throw error
     }
 }
 

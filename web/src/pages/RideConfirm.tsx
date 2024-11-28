@@ -4,11 +4,12 @@ import Map from '../components/templates/ride/Map'
 import RideOptions from '../components/templates/ride/confirm/RideOptions'
 import { RideContext } from '../contexts/Ride'
 import Header from '../components/header/Header'
+import { toast } from 'react-toastify'
 
 const RideConfirmPage: React.FC = () => {
   const { state } = useLocation()
   const { rideData, origin, destination, duration, distance, options } = state?.result || {}
-  const { handleConfirmRide } = useContext(RideContext)
+  const { loading, setLoading, handleConfirmRide } = useContext(RideContext)
   const [selectedDriver, setSelectedDriver] = useState<any>(null)
   const navigate = useNavigate()
 
@@ -36,10 +37,25 @@ const RideConfirmPage: React.FC = () => {
 
     const response = await handleConfirmRide(data as any)
 
+    setLoading(true)
+
     if (response.success) {
-      navigate('/historico-viagens', {
-        state: { customer_id: rideData.customer_id, driver_id: selectedDriver.id }, replace: true
+      toast.success('Viagem confirmada com sucesso!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       })
+
+      setTimeout(() => {
+        navigate('/historico-viagens', {
+          state: { customer_id: rideData.customer_id, driver_id: selectedDriver.id },
+          replace: true
+        })
+      }, 1800)
     }
   }
 
@@ -61,9 +77,12 @@ const RideConfirmPage: React.FC = () => {
       {selectedDriver && (
         <button
           onClick={confirm}
-          className="w-full bg-green-500 text-white py-2 rounded mt-4 hover:bg-green-700"
+          disabled={loading}
+          className={`w-full py-2 rounded mt-4 flex justify-center items-center 
+            ${loading ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-700'} 
+            text-white`}
         >
-          Confirmar Viagem
+          {loading ? 'Carregando...' : 'Confirmar Viagem'}
         </button>
       )}
     </div>

@@ -14,10 +14,14 @@ const RideEstimateForm: React.FC = () => {
     const [destinationAutocomplete, setDestinationAutocomplete] = useState<google.maps.places.Autocomplete | null>(null)
 
     const onSubmit: SubmitHandler<RideEstimateParams> = async (data) => {
-        const result = await handleEstimateRide(data)
+        try {
+            const result = await handleEstimateRide(data)
 
-        reset()
-        navigate('/opcoes-de-viagem', { state: { result: { ...result?.data, rideData: data } } })
+            reset()
+            navigate('/opcoes-de-viagem', { state: { result: { ...result?.data, rideData: data } } })
+        } catch (error) {
+            console.log('Erro ao estimar viagem:', error)
+        }
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -28,17 +32,24 @@ const RideEstimateForm: React.FC = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-3xl font-semibold text-center text-blue-600 mb-6">Solicitar Viagem</h2>
+            <h2 className="text-3xl font-semibold text-center text-primary mb-6">Solicitar Viagem</h2>
 
             <div className="mb-6">
                 <label htmlFor="customer_id" className="text-lg text-gray-600">ID do Cliente</label>
                 <input
                     id="customer_id"
-                    {...register('customer_id', { required: true, pattern: /^[0-9]+$/ })}
+                    type="number"
+                    {...register('customer_id', {
+                        required: 'ID do Cliente é obrigatório.',
+                        pattern: {
+                            value: /^[0-9]+$/,
+                            message: 'Somente números são permitidos.'
+                        }
+                    })}
                     placeholder="Digite o ID do cliente"
-                    className="w-full p-3 mt-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    className={`w-full p-3 mt-2 border-2 rounded-md focus:outline-none focus:ring-2 transition-all ${errors.customer_id ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'}`}
                 />
-                {errors.customer_id && <span className="text-red-500 text-sm">ID do Cliente é obrigatório e deve ser numérico.</span>}
+                {errors.customer_id && <span className="text-red-500 text-sm">{errors.customer_id.message}</span>}
             </div>
 
             <div className="mb-6">
@@ -59,12 +70,12 @@ const RideEstimateForm: React.FC = () => {
                     <input
                         onKeyDown={handleKeyDown}
                         id="origin"
-                        {...register('origin', { required: true })}
+                        {...register('origin', { required: 'Origem é obrigatória.' })}
                         placeholder="Digite a origem"
-                        className="w-full p-3 mt-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        className={`w-full p-3 mt-2 border-2 rounded-md focus:outline-none focus:ring-2 transition-all ${errors.origin ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'}`}
                     />
                 </Autocomplete>
-                {errors.origin && <span className="text-red-500 text-sm">Origem é obrigatória.</span>}
+                {errors.origin && <span className="text-red-500 text-sm">{errors.origin.message}</span>}
             </div>
 
             <div className="mb-6">
@@ -85,22 +96,22 @@ const RideEstimateForm: React.FC = () => {
                     <input
                         onKeyDown={handleKeyDown}
                         id="destination"
-                        {...register('destination', { required: true })}
+                        {...register('destination', { required: 'Destino é obrigatório.' })}
                         placeholder="Digite o destino"
-                        className="w-full p-3 mt-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        className={`w-full p-3 mt-2 border-2 rounded-md focus:outline-none focus:ring-2 transition-all ${errors.destination ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'}`}
                     />
                 </Autocomplete>
-                {errors.destination && <span className="text-red-500 text-sm">Destino é obrigatório.</span>}
+                {errors.destination && <span className="text-red-500 text-sm">{errors.destination.message}</span>}
             </div>
 
             <div className="flex justify-center items-center">
-                <input
+                <button
                     type="submit"
-                    name="submit"
-                    value={loading ? 'Carregando...' : 'Estimar Viagem'}
                     disabled={!isValid || loading}
-                    className={`w-full py-3 mt-6 rounded-lg transition-all ${isValid && !loading ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-400 text-gray-600 cursor-not-allowed'}`}
-                />
+                    className={`w-full py-3 mt-6 rounded-lg transition-all ${isValid && !loading ? 'bg-primary text-white hover:bg-neutral-500' : 'bg-gray-400 text-gray-600 cursor-not-allowed'}`}
+                >
+                    {loading ? 'Carregando...' : 'Estimar Viagem'}
+                </button>
             </div>
         </form>
     )

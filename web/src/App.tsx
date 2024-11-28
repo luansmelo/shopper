@@ -1,5 +1,7 @@
 import { Router } from './routes';
 import { LoadScript } from '@react-google-maps/api';
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   return (
@@ -7,6 +9,7 @@ function App() {
       <LoadScript googleMapsApiKey={process.env.GOOGLE_API_KEY || ''} libraries={['places']}>
         <Router />
       </LoadScript>
+      <ToastContainer />
     </div>
   );
 }
