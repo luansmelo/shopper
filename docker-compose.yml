@@ -19,12 +19,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}   
+      - DB_HOST=shopper_db                   
       - DB_USER=tiger
-      - DB_HOST=shopper_db
+      - DB_PASSWORD=o61QpN7!4YZ.hhe
       - DB_PORT=5432
-    env_file:
-      - .env
+      - DB_NAME=shopper
     depends_on:
       - db
 
@@ -34,9 +34,8 @@ services:
     container_name: shopper_web
     ports:
       - "80:80"
-      - "5173:5173"
-    env_file:
-      - .env
+    environment:
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
     depends_on:
       - api
 
