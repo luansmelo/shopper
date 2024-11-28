@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Map from '../components/templates/ride/Map'
 import RideOptions from '../components/templates/ride/confirm/RideOptions'
 import { RideContext } from '../contexts/Ride'
+import Header from '../components/header/Header'
 
 const RideConfirmPage: React.FC = () => {
   const { state } = useLocation()
@@ -19,7 +20,7 @@ const RideConfirmPage: React.FC = () => {
 
   const confirm = async () => {
     if (!selectedDriver) return
-
+    
     const data = {
       customer_id: rideData.customer_id,
       origin: rideData.origin,
@@ -29,7 +30,8 @@ const RideConfirmPage: React.FC = () => {
       driver: {
         id: selectedDriver.id,
         name: selectedDriver.name
-      }
+      },
+      value: selectedDriver.value
     }
 
     const response = await handleConfirmRide(data as any)
@@ -43,6 +45,7 @@ const RideConfirmPage: React.FC = () => {
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">
+      <Header />
       <h1 className="text-3xl font-semibold text-center text-blue-600 mb-8">Opções de Viagem</h1>
 
       <div className="map-container mb-8">

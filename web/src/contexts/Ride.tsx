@@ -1,18 +1,21 @@
-import React, { createContext, ReactNode } from 'react';
-import { Ride, RideConfirmParams, RideConfirmResult, RideEstimateParams } from '../services/ride.service';
+import React, { createContext, ReactNode, useState } from 'react'
+import { Ride, RideConfirmParams, RideConfirmResult, RideEstimateParams } from '../services/ride.service'
 
 interface RideState {
     handleEstimateRide: (body: RideEstimateParams) => Promise<any>
     handleConfirmRide: (body: RideConfirmParams) => Promise<RideConfirmResult>
+    loading: boolean
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const RideContext = createContext<RideState>({} as RideState);
+export const RideContext = createContext<RideState>({} as RideState)
 
 interface RideProviderProps {
-    children: ReactNode;
+    children: ReactNode
 }
 
 export const RideProvider: React.FC<RideProviderProps> = ({ children }) => {
+    const [loading, setLoading] = useState<boolean>(true)
 
     const handleEstimateRide = async (body: RideEstimateParams) => {
         try {
@@ -20,6 +23,8 @@ export const RideProvider: React.FC<RideProviderProps> = ({ children }) => {
             return response
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -29,12 +34,14 @@ export const RideProvider: React.FC<RideProviderProps> = ({ children }) => {
             return response && response?.data
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 
     return (
         <RideContext.Provider
-            value={{ handleConfirmRide, handleEstimateRide }}>
+            value={{ loading, setLoading, handleConfirmRide, handleEstimateRide }}>
             {children}
         </RideContext.Provider>
     )

@@ -19,6 +19,9 @@ export class RideModel extends Model {
     @Column({ type: DataType.STRING, allowNull: false })
     destination!: string
 
+    @Column({ type: DataType.INTEGER, allowNull: false })
+    customer_id!: number
+
     @ForeignKey(() => DriverModel)
     @Column({ type: DataType.INTEGER, allowNull: false })
     driver_id!: number

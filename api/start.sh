@@ -6,8 +6,13 @@ until nc -z -v -w30 $DB_HOST 5432; do
     sleep 1
 done
 
-echo "Banco de dados está online! Rodando as seeds..."
+echo "Banco de dados está online! Inicializando o servidor..."
+
+npm start &  
+
+sleep 5
+
+echo "Rodando seeds..."
 npm run db:seed
 
-echo "Iniciando o servidor..."
-npm start
+wait 

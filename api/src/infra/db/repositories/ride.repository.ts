@@ -9,6 +9,7 @@ export class RideRepository implements RideConfirmRepositoryProtocol, LoadRidesR
     }
 
     async load(params: LoadRidesRepositoryProtocol.Params): Promise<LoadRidesRepositoryProtocol.Result> {
+        console.log(params)
         const { customer_id, driver_id } = params
         let whereCondictions: Record<string, number> = {
             customer_id,
@@ -26,6 +27,7 @@ export class RideRepository implements RideConfirmRepositoryProtocol, LoadRidesR
             }],
             order: [['date', 'DESC']],
         })
+        console.log(rides)
 
         return {
             customer_id,
