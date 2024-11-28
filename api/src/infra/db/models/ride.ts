@@ -1,5 +1,4 @@
 import { Table, Column, Model, DataType, PrimaryKey, ForeignKey, BelongsTo, AutoIncrement } from "sequelize-typescript"
-import { CustomerModel } from "./customer"
 import { DriverModel } from "./driver"
 
 @Table({ tableName: "ride", timestamps: true })
@@ -10,13 +9,6 @@ export class RideModel extends Model {
         type: DataType.INTEGER,
     })
     id!: number
-
-    @ForeignKey(() => CustomerModel)
-    @Column({ type: DataType.INTEGER, allowNull: false })
-    customer_id!: number
-
-    @BelongsTo(() => CustomerModel)
-    customer!: CustomerModel
 
     @Column({ type: DataType.DATE, allowNull: false, defaultValue: DataType.NOW }) // Adicionando o campo `date`
     date!: Date

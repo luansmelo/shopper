@@ -1,11 +1,11 @@
-import { CustomerModel, DriverModel, RideModel } from "@/infra/db/models"
+import { DriverModel, RideModel } from "@/infra/db/models"
 import { Sequelize } from "sequelize-typescript"
 
 const env = process.env.NODE_ENV || 'development'
 
 const getDatabaseConfig = () => {
     const commonConfig = {
-        models: [CustomerModel, RideModel, DriverModel],
+        models: [RideModel, DriverModel],
     }
 
     const config = {

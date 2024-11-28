@@ -4,13 +4,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/main/server.js",
-    "build": "rm -rf dist && tsc -p tsconfig-build.json",
+    "build": "rimraf dist dist && tsc -p tsconfig-build.json",
     "test": "jest --silent --colors --noStackTrace --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit.config.ts",
     "test:integration": "npm test -- --watch --detectOpenHandles -c jest-integration.config.ts",
     "test:staged": "npm test --findRelatedTests",
     "prepare": "husky",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:seed": ""
   },
   "lint-staged": {
     "*.ts": [
@@ -49,6 +50,7 @@
     "module-alias": "^2.2.3",
     "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
+    "rimraf": "^6.0.1",
     "sequelize": "^6.37.5",
     "sequelize-typescript": "^2.1.6",
     "sqlite3": "^5.1.7",
