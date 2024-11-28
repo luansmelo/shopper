@@ -15,9 +15,10 @@ interface RideProviderProps {
 }
 
 export const RideProvider: React.FC<RideProviderProps> = ({ children }) => {
-    const [loading, setLoading] = useState<boolean>(true)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const handleEstimateRide = async (body: RideEstimateParams) => {
+        setLoading(true)
         try {
             const response = await Ride.create(body)
             return response
