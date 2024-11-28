@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 
 interface InputContentProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  className?: string
+    extends React.InputHTMLAttributes<HTMLInputElement> {
+    className?: string
 }
 
-const InputContent: React.FC<InputContentProps> = ({ className, ...rest }) => {
-  return (
-    <input
-      className={`w-full border-none bg-light text-dark outline-none placeholder:text-sm placeholder:text-placeholder focus:ring-0 focus:ring-offset-0 disabled:text-gray ${className}`}
-      {...rest}
-    />
-  )
-}
+const InputContent = forwardRef<HTMLInputElement, InputContentProps>(
+    ({ className, ...rest }, ref) => {
+        return (
+            <input
+                className={`w-full border border-gray-300 bg-light text-dark placeholder:text-sm placeholder:text-placeholder focus:ring-2 focus:ring-blue-300 ${className}`}
+                ref={ref}
+                {...rest}
+            />
+        )
+    }
+)
 
 export default InputContent
