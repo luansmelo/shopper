@@ -1,8 +1,5 @@
 import api from "../config/api"
-
-export type RideEstimateResponse = {
-
-}
+import { DriverType } from "./driver.service"
 
 export type RideEstimateParams = {
     customer_id: number
@@ -16,11 +13,24 @@ export type RideConfirmParams = {
     destination: string
     duration: string
     distance: number
-    driver: {
-        id: number
-        name: string
-    }
+    driver: DriverType
     value: number
+}
+
+export type RideType = {
+    id: number;
+    date: string;
+    driver: DriverType;
+    origin: string;
+    destination: string;
+    distance: number;
+    duration: string;
+    value: number;
+}
+
+export interface RideResult {
+    customer: number
+    rides: RideType[]
 }
 
 export type RideConfirmResult = {

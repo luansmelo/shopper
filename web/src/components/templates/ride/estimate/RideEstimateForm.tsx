@@ -20,6 +20,12 @@ const RideEstimateForm: React.FC = () => {
         navigate('/opcoes-de-viagem', { state: { result: { ...result?.data, rideData: data } } })
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            event.preventDefault()
+        }
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
             <h2 className="text-3xl font-semibold text-center text-blue-600 mb-6">Solicitar Viagem</h2>
@@ -51,6 +57,7 @@ const RideEstimateForm: React.FC = () => {
                     }}
                 >
                     <input
+                        onKeyDown={handleKeyDown}
                         id="origin"
                         {...register('origin', { required: true })}
                         placeholder="Digite a origem"
@@ -76,6 +83,7 @@ const RideEstimateForm: React.FC = () => {
                     }}
                 >
                     <input
+                        onKeyDown={handleKeyDown}
                         id="destination"
                         {...register('destination', { required: true })}
                         placeholder="Digite o destino"

@@ -1,16 +1,8 @@
 import api from "../config/api"
 
-export type RideConfirmParams = {
-    customer_id: number
-    origin: string
-    destination: string
-    duration: string
-    distance: number
-    driver: {
-        id: number
-        name: string
-    }
-    value: number
+export type DriverType = {
+    id: number
+    name: string
 }
 
 const loadDrivers = async () => {

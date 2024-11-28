@@ -1,34 +1,38 @@
-import React, { useState, useEffect } from 'react'
-import { Ride } from '../services/ride.service'
-import { useLocation } from 'react-router-dom'
+import React, { useState, useEffect, useContext } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Header from '../components/header/Header'
-import { Driver } from '../services/driver.service'
+import { Driver, DriverType } from '../services/driver.service'
+import { DotLoader } from 'react-spinners'
+import { RideContext } from '../contexts/Ride'
+import { RideType } from '../services/ride.service'
 
 const TravelHistory: React.FC = () => {
+    const navigate = useNavigate()
     const { state } = useLocation()
-    const [userRides, setUserRides] = useState([])
+    const { loading, rides, setRides, setLoading, handleLoadRides } = useContext(RideContext)
+
     const [driverId, setDriverId] = useState<string>('')
-    const [allDrivers, setAllDrivers] = useState<any[]>([])
-    const [filteredRides, setFilteredRides] = useState<any[]>([])
-    const [loading, setLoading] = useState(false)
     const [customerId, setCustomerId] = useState<string>('')
+    const [allDrivers, setAllDrivers] = useState<DriverType[]>([])
+    const [filteredRides, setFilteredRides] = useState<RideType[]>([])
 
     useEffect(() => {
         const fetchDrivers = async () => {
             const driversResponse = await Driver.loadDrivers()
-            setAllDrivers(driversResponse && driversResponse.data)
+            setAllDrivers(driversResponse?.data || [])
         }
-
         fetchDrivers()
     }, [])
 
     useEffect(() => {
-        if (!state) {
-            window.location.href = '/'
+        if (!state?.customer_id) {
+            navigate('/', { replace: true })
+        } else {
+            setCustomerId(state.customer_id)
         }
-    }, [state])
+    }, [state, navigate])
 
-    const handleLoadRides = async () => {
+    const loadAllRides = async () => {
         if (!customerId) return
 
         setLoading(true)
@@ -38,22 +42,27 @@ const TravelHistory: React.FC = () => {
             driver_id: driverId ? parseInt(driverId) : undefined,
         }
 
-        const response = await Ride.loadRides(params as any)
-        setUserRides(response?.data?.rides || [])
-        setLoading(false)
+        const response = await handleLoadRides(params as any)
+        setRides(response)
     }
 
     useEffect(() => {
-        if (userRides.length > 0) {
+        if (customerId) {
+            loadAllRides()
+        }
+    }, [customerId, driverId])
+
+    useEffect(() => {
+        if (rides?.rides?.length > 0) {
             const filtered = driverId
-                ? userRides.filter((ride: any) => ride.driver.id === parseInt(driverId))
-                : userRides
+                ? rides.rides.filter((ride: RideType) => ride.driver.id === parseInt(driverId))
+                : rides.rides
             setFilteredRides(filtered)
         }
-    }, [driverId, userRides])
+    }, [driverId, rides])
 
-    const handleApplyFilter = () => {
-        handleLoadRides()
+    const handleDriverChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setDriverId(event.target.value)
     }
 
     return (
@@ -68,12 +77,14 @@ const TravelHistory: React.FC = () => {
                     value={customerId}
                     onChange={(e) => setCustomerId(e.target.value)}
                     className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
                 />
 
                 <select
                     value={driverId}
-                    onChange={(e) => setDriverId(e.target.value)}
+                    onChange={handleDriverChange}
                     className="p-2 border border-gray-300 rounded"
+                    disabled={loading}
                 >
                     <option value="">Todos os motoristas</option>
                     {allDrivers?.map((driver) => (
@@ -82,17 +93,12 @@ const TravelHistory: React.FC = () => {
                         </option>
                     ))}
                 </select>
-
-                <button
-                    onClick={handleApplyFilter}
-                    className="bg-blue-600 text-white p-2 rounded"
-                >
-                    Aplicar Filtro
-                </button>
             </div>
 
             {loading ? (
-                <p className="text-center text-blue-600">Carregando...</p>
+                <div className="absolute inset-0 flex items-center justify-center bg-transparent">
+                    <DotLoader color="#1e40af" />
+                </div>
             ) : (
                 <div className="mb-6">
                     {filteredRides.length === 0 ? (
@@ -103,11 +109,11 @@ const TravelHistory: React.FC = () => {
                                 <li key={ride.id} className="bg-white shadow-md p-4 mb-4 rounded-lg">
                                     <p><strong>Data e Hora:</strong> {new Date(ride.date).toLocaleString()}</p>
                                     <p><strong>Motorista:</strong> {ride.driver.name}</p>
-                                    <p><strong>Origem:</strong> {ride.origin}</p>
-                                    <p><strong>Destino:</strong> {ride.destination}</p>
+                                    <p><strong>Origem:</strong> {ride.origin.split(', ')[0]}</p>
+                                    <p><strong>Destino:</strong> {ride.destination.split(', ')[0]}</p>
                                     <p><strong>Distância:</strong> {ride.distance} km</p>
                                     <p><strong>Duração:</strong> {ride.duration}</p>
-                                    <p><strong>Valor:</strong> R${ride.value}</p>
+                                    <p><strong>Valor:</strong> R${ride.value.toFixed(2).replace('.', ',')}</p>
                                 </li>
                             ))}
                         </ul>
